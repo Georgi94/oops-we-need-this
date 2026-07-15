@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fffaf2;
+  --foreground: #453a2f;
+  --card: #ffffff;
+  --muted: #9c8d7d;
+  --danger: #d13438;
+
+  --macinka-surface: #fdf3cf;
+  --macinka-card: #fffcf1;
+  --macinka-border: #f2df9a;
+  --macinka-accent: #f2c14e;
+  --macinka-accent-ink: #4a3705;
+  --macinka-soft: #f9ecc0;
+  --macinka-ink: #8a6a14;
+
+  --zhorzhi-surface: #e4f6e7;
+  --zhorzhi-card: #f4fcf5;
+  --zhorzhi-border: #b9e4c0;
+  --zhorzhi-accent: #58b96e;
+  --zhorzhi-accent-ink: #0b3317;
+  --zhorzhi-soft: #d1efd7;
+  --zhorzhi-ink: #2b6e40;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1b1712;
+    --foreground: #efe6da;
+    --card: #262019;
+    --muted: #a29383;
+    --danger: #ff7a7f;
+
+    --macinka-surface: #2b230c;
+    --macinka-card: #332a10;
+    --macinka-border: #55461a;
+    --macinka-accent: #f2c14e;
+    --macinka-accent-ink: #4a3705;
+    --macinka-soft: #453a16;
+    --macinka-ink: #f0d488;
+
+    --zhorzhi-surface: #12271a;
+    --zhorzhi-card: #18301f;
+    --zhorzhi-border: #2b5637;
+    --zhorzhi-accent: #58b96e;
+    --zhorzhi-accent-ink: #0b3317;
+    --zhorzhi-soft: #1f4029;
+    --zhorzhi-ink: #a4d9b1;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-danger: var(--danger);
+
+  --color-macinka-surface: var(--macinka-surface);
+  --color-macinka-card: var(--macinka-card);
+  --color-macinka-border: var(--macinka-border);
+  --color-macinka-accent: var(--macinka-accent);
+  --color-macinka-accent-ink: var(--macinka-accent-ink);
+  --color-macinka-soft: var(--macinka-soft);
+  --color-macinka-ink: var(--macinka-ink);
+
+  --color-zhorzhi-surface: var(--zhorzhi-surface);
+  --color-zhorzhi-card: var(--zhorzhi-card);
+  --color-zhorzhi-border: var(--zhorzhi-border);
+  --color-zhorzhi-accent: var(--zhorzhi-accent);
+  --color-zhorzhi-accent-ink: var(--zhorzhi-accent-ink);
+  --color-zhorzhi-soft: var(--zhorzhi-soft);
+  --color-zhorzhi-ink: var(--zhorzhi-ink);
+
+  --font-sans: var(--font-nunito);
+}
+
+@theme {
+  --animate-pop-in: pop-in 240ms ease-out both;
+  --animate-float: float-y 3.4s ease-in-out infinite;
+  --animate-wiggle: wiggle 420ms ease-in-out;
+  --animate-check: check-pop 220ms ease-out;
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes float-y {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-10deg);
+    }
+    75% {
+      transform: rotate(10deg);
+    }
+  }
+
+  @keyframes check-pop {
+    0% {
+      transform: scale(0.4);
+    }
+    60% {
+      transform: scale(1.25);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
