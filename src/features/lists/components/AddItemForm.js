@@ -39,7 +39,7 @@ export function AddItemForm({ listId, owner }) {
         </SubmitButton>
       </div>
       {state.status === 'error' && (
-        <p role="alert" aria-live="polite" className="text-sm font-semibold text-danger">
+        <p role="alert" className="text-sm font-semibold text-danger">
           {state.message}
         </p>
       )}

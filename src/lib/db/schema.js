@@ -7,7 +7,11 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 
-export const ownerEnum = pgEnum('owner', ['macinka', 'zhorzhi']);
+// Relative import: drizzle-kit loads this file outside Next.js, where the
+// jsconfig "@/" alias is not resolved.
+import { OWNER_KEYS } from '../../config/owners';
+
+export const ownerEnum = pgEnum('owner', OWNER_KEYS);
 
 export const lists = pgTable('lists', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),

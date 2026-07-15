@@ -21,7 +21,41 @@ export const getListSummaries = cache(async () => {
     .from(lists)
     .leftJoin(listItems, eq(listItems.listId, lists.id))
     .groupBy(lists.id)
-    .orderBy(asc(lists.createdAt));
+    // id tiebreaker keeps the order stable when createdAt timestamps collide.
+    .orderBy(asc(lists.createdAt), asc(lists.id));
+});
+
+/** Full export of every list with its items, for the JSON backup download. */
+export const getBackupData = cache(async () => {
+  const db = getDb();
+  const [allLists, allItems] = await Promise.all([
+    db
+      .select({
+        id: lists.id,
+        title: lists.title,
+        emoji: lists.emoji,
+        owner: lists.owner,
+        createdAt: lists.createdAt,
+      })
+      .from(lists)
+      .orderBy(asc(lists.createdAt), asc(lists.id)),
+    db
+      .select({
+        id: listItems.id,
+        listId: listItems.listId,
+        text: listItems.text,
+        done: listItems.done,
+        createdAt: listItems.createdAt,
+      })
+      .from(listItems)
+      .orderBy(asc(listItems.createdAt), asc(listItems.id)),
+  ]);
+  return allLists.map((list) => ({
+    ...list,
+    items: allItems
+      .filter((item) => item.listId === list.id)
+      .map(({ listId: _listId, ...item }) => item),
+  }));
 });
 
 export const getListDetail = cache(async (id) => {
@@ -35,7 +69,7 @@ export const getListDetail = cache(async (id) => {
       .select({ id: listItems.id, text: listItems.text, done: listItems.done })
       .from(listItems)
       .where(eq(listItems.listId, id))
-      .orderBy(asc(listItems.createdAt)),
+      .orderBy(asc(listItems.createdAt), asc(listItems.id)),
   ]);
   const list = listRows[0];
   if (!list) return null;

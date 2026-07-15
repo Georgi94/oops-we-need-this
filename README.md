@@ -55,18 +55,20 @@ First-time setup:
 
 1. Push this repo to GitHub and import it in Vercel (framework preset: Next.js — no config needed).
 2. In Vercel → Storage, create a **Neon** Postgres database and connect it to the project. `DATABASE_URL` is injected automatically.
-3. Locally, run `vercel env pull .env.local` then `npm run db:push` to create the tables in that database.
-4. Redeploy. Done.
+3. In Vercel → Project Settings → Environment Variables, add `BASIC_AUTH_USER` and `BASIC_AUTH_PASS`. The site fails closed (401 everywhere) until they are set.
+4. Locally, run `vercel env pull .env.local` then `npm run db:push` to create the tables in that database.
+5. Redeploy. Done.
 
 Routine deployments: push to `main` — Vercel builds and deploys automatically.
 
-**Recommended:** the app has no login (it's a private space for two). Enable [Vercel Deployment Protection](https://vercel.com/docs/deployment-protection) (e.g. password protection) or keep the URL private.
+The whole site sits behind HTTP Basic Auth (`src/proxy.js`), and every Server Action re-checks the credentials. [Vercel Deployment Protection](https://vercel.com/docs/deployment-protection) can be layered on top if you want a second gate.
 
 Post-deploy check: open the production URL, create a list on each side, add an item, check it off, delete it.
 
 ## Architecture notes
 
-- `src/features/lists/` — the whole feature: server queries (`api/`), Server Actions (`actions/`), components. Public interface: `src/features/lists/index.ts`.
+- `src/features/lists/` — the whole feature: server queries (`api/`), Server Actions (`actions/`), components. Public interface: `src/features/lists/index.js`.
 - `src/lib/db/` — Drizzle schema + lazy Neon client (build works without `DATABASE_URL`; the first query fails fast with a clear message).
-- `src/config/owners.ts` — the two people, their colors and copy. Add fields here to re-theme.
+- `src/lib/basic-auth.js` — one credential check shared by the proxy and by every Server Action (actions are public POST endpoints, so they never rely on the proxy alone).
+- `src/config/owners.js` — the two people, their colors and copy. Add fields here to re-theme; the DB `owner` enum derives from `OWNER_KEYS`.
 - Pages are `force-dynamic`: every request reads fresh data; mutations revalidate via `revalidatePath`.

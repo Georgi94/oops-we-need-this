@@ -4,16 +4,18 @@ import { revalidatePath } from 'next/cache';
 
 import { and, eq } from 'drizzle-orm';
 
+import { isAuthenticated } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { listItems } from '@/lib/db/schema';
 
-function toId(value) {
-  const id = Number(value);
-  return Number.isInteger(id) && id > 0 ? id : null;
-}
+import { toPositiveInt } from '../lib/ids';
+
+const UNAUTHORIZED = { status: 'error', message: 'Нямаш достъп 🔒' };
 
 export async function addItem(_prev, formData) {
-  const listId = toId(formData.get('listId'));
+  if (!(await isAuthenticated())) return UNAUTHORIZED;
+
+  const listId = toPositiveInt(formData.get('listId'));
   const text = String(formData.get('text') ?? '').trim();
 
   if (!listId) return { status: 'error', message: 'Невалиден списък' };
@@ -34,8 +36,10 @@ export async function addItem(_prev, formData) {
 }
 
 export async function toggleItem({ itemId, listId, done }) {
-  const safeItemId = toId(itemId);
-  const safeListId = toId(listId);
+  if (!(await isAuthenticated())) return UNAUTHORIZED;
+
+  const safeItemId = toPositiveInt(itemId);
+  const safeListId = toPositiveInt(listId);
   if (!safeItemId || !safeListId) {
     return { status: 'error', message: 'Невалидна задачка' };
   }
@@ -54,8 +58,10 @@ export async function toggleItem({ itemId, listId, done }) {
 }
 
 export async function deleteItem({ itemId, listId }) {
-  const safeItemId = toId(itemId);
-  const safeListId = toId(listId);
+  if (!(await isAuthenticated())) return UNAUTHORIZED;
+
+  const safeItemId = toPositiveInt(itemId);
+  const safeListId = toPositiveInt(listId);
   if (!safeItemId || !safeListId) {
     return { status: 'error', message: 'Невалидна задачка' };
   }

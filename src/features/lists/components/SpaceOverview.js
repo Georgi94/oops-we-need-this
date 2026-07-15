@@ -28,6 +28,14 @@ export async function SpaceOverview() {
       <footer className="mt-10 text-center text-sm text-muted">
         Направено с 💛 и 💚
       </footer>
+      <a
+        href="/api/backup"
+        download
+        className="fixed bottom-4 right-4 z-10 hidden h-10 items-center gap-1.5 rounded-full border-2 border-card bg-card px-4 text-sm font-bold text-muted outline-none transition-transform hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-foreground active:scale-95 lg:inline-flex"
+      >
+        <span aria-hidden="true">⬇️</span>
+        Резервно копие
+      </a>
     </main>
   );
 }
