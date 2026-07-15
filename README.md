@@ -33,6 +33,8 @@ Open http://localhost:3000.
 | Variable | Required | Purpose |
 |---|---|---|
 | `DATABASE_URL` | Yes | Postgres connection string for the Neon database (format: `postgres://USER:PASSWORD@HOST/DB?sslmode=require`) |
+| `BASIC_AUTH_USER` | Yes | HTTP Basic Auth username — the whole site is behind it (fail-closed if unset) |
+| `BASIC_AUTH_PASS` | Yes | HTTP Basic Auth password |
 
 All variables are documented in `.env.example`. Never commit `.env.local`.
 

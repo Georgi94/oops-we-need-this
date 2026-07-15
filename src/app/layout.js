@@ -10,6 +10,10 @@ const nunito = Nunito({
 export const metadata = {
   title: "Мацинка 💛 Жоржи",
   description: "Нашето споделено кътче със списъчета за двама",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({ children }) {
